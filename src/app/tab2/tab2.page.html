@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Tab 2
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 2</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-list>
+    <ion-item *ngFor="let order of order_list" (click)="goToOrderDetail(order)">
+      <ion-title>{{order.orderID}}</ion-title>
+      <ion-label>{{order.num_items}}</ion-label>
+      <ion-label>{{order.orderDate}}</ion-label>
+      <ion-note>{{order.totalPrice}}</ion-note>
+
+    </ion-item>
+  </ion-list>
+</ion-content>

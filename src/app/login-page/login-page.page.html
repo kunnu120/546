@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>loginPage</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content>
+<ion-item >
+  <ion-label>
+    Email
+  </ion-label>  
+  <ion-input [(ngModel)]="email"></ion-input>
+</ion-item>
+
+<ion-item >
+  <ion-label>
+    Password
+  </ion-label>  
+  <ion-input [(ngModel)]="password"></ion-input>
+</ion-item>
+
+<ion-button (click)="goToTab1()" >Login</ion-button>
+<ion-button (click)="goToSignupPage()" >SignUP</ion-button>
+<ion-button (click)="goToGoogleLogin()" >Google Login</ion-button>
+
+</ion-content>

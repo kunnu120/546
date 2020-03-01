@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>signupPage</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item >
+    <ion-label>
+      Name
+    </ion-label>  
+    <ion-input [(ngModel)]="name"></ion-input>
+  </ion-item>
+
+  <ion-item >
+    <ion-label>
+      Email
+    </ion-label>  
+    <ion-input [(ngModel)]="email"></ion-input>
+  </ion-item>
+  
+  <ion-item >
+    <ion-label>
+      Password
+    </ion-label>  
+    <ion-input [(ngModel)]="password"></ion-input>
+  </ion-item>
+
+  <ion-button (click)="signup()" >Register</ion-button>
+</ion-content>
