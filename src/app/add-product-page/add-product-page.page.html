@@ -14,14 +14,14 @@
   <ion-list>
     <ion-item>
       <ion-label>Price</ion-label>
-      <ion-input [(ngModel)]="price" ></ion-input>
+      <ion-input type = "number" [(ngModel)]="price" ></ion-input>
     </ion-item>
   </ion-list>
 
   <ion-list>
     <ion-item>
       <ion-label>Category</ion-label>
-      <ion-select [(ngModel)]="name" >
+      <ion-select [(ngModel)]="category" >
         <ion-select-option >Toy</ion-select-option>
         <ion-select-option >Food</ion-select-option>
         <ion-select-option >Drink</ion-select-option>
@@ -42,5 +42,5 @@
       <ion-input [(ngModel)]="description" ></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button >Add</ion-button>
+  <ion-button (click)="addProductToFirebase()" >Add</ion-button>
 </ion-content>

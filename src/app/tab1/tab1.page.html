@@ -14,7 +14,7 @@
   </ion-header>
   <ion-list>
     <ion-item *ngFor="let product of product_list" (click)="goToProductDetail(product)">
-      <ion-img src="{{product.image}}"></ion-img>
+      <ion-img src="{{product.photoURL}}"></ion-img>
       <ion-title>{{product.name}}</ion-title>
       <ion-label>{{product.price}}</ion-label>
       <ion-note>{{product.category}}</ion-note>
