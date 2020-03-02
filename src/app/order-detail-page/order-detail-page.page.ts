@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
+
 @Component({
   selector: 'app-order-detail-page',
   templateUrl: './order-detail-page.page.html',
