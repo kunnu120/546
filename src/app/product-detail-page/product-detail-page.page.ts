@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import * as firebase from 'firebase';
-import { orders, order} from '../tab2/tab2.page';
+import { order} from '../tab2/tab2.page';
 import { Tab2Page } from '../tab2/tab2.page';
 @Component({
   selector: 'app-product-detail-page',
@@ -10,7 +10,6 @@ import { Tab2Page } from '../tab2/tab2.page';
 })
 export class ProductDetailPagePage implements OnInit {
   product: {};
-  public static Orders;
   public item: Item;
   public quantity: number;
 
@@ -26,24 +25,47 @@ export class ProductDetailPagePage implements OnInit {
   }
 
   AddToOrder() {
-    var k = [];
-    ProductDetailPagePage.Orders = new orders();
-    firebase.database().ref('Orders/'+firebase.auth().currentUser.uid).on('value', function(snapshot) {
-      snapshot.forEach(function(cShot) {
-        k.push(cShot.key);
-
-        firebase.database().ref('Orders/'+cShot.ref.parent.toString().substring(cShot.ref.parent.toString().lastIndexOf('/'))+'/'+k[k.length-1]).on('value', function(cSnap) {
-          var m = cSnap.val();
-          ProductDetailPagePage.Orders = JSON.parse(m);
+    firebase.database().ref('orders/'+firebase.auth().currentUser.uid+'/').once('value', snap => {
+      if(snap) {
+        var orders: order[] = [];
+        snap.forEach(shot => {
+          orders.push(shot.val());
         });
-      });
-    });
-    for(var i:number=0; i<this.quantity; i++) {
-      ProductDetailPagePage.Orders.currentOrder.items.push(this.item);
-      ProductDetailPagePage.Orders.currentOrder.totalItems++;
-      ProductDetailPagePage.Orders.currentOrder.totalPrice += this.item.price;
-      ProductDetailPagePage.Orders.orderList[ProductDetailPagePage.Orders.orderList.length-1] = ProductDetailPagePage.Orders.currentOrder;
-    }
+        console.log(orders);
+        orders.push(new order(new Date(), this.product['name'], firebase.auth().currentUser.uid,this.quantity, this.product['price']));
+        var updates = {};
+        updates['orders/'+firebase.auth().currentUser.uid+'/'] = orders;
+        firebase.database().ref().update(updates);
+      } else if (!snap) {
+        var orders: order[] = [new order(new Date(), this.product['name'], firebase.auth().currentUser.uid,this.quantity, this.product['price'])];
+        firebase.database().ref('orders/'+firebase.auth().currentUser.uid+'/').set(orders).then(x => {
+          console.log("success");
+        });
+      }
+    })
+  }
+
+  Delete() {
+    firebase.database().ref('products/').once('value', snap => {
+      if(snap) {
+        var products: {}[] = [];
+        snap.forEach(shot => {
+          products.push(shot.val());
+        });
+        for(var i: number = 0; i<products.length;i++) {
+          if(products[i]['category'] == this.product['category'] && products[i]['description'] == this.product['description'] && products[i]['name'] == this.product['name'] && products[i]['photoURL'] == this.product['photoURL'] && products[i]['price'] == this.product['price'] && products[i]['userid'] == this.product['userid']) {
+            products.splice(i,1);
+          }
+        }
+
+        var updates = {};
+        updates['products/'] = products;
+        firebase.database().ref().update(updates);
+        this.route.navigate(['tabs/tab1'])
+      } else if(!snap) {
+        alert("U done fucked up boy");
+      }
+    })
   }
 
 

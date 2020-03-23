@@ -13,10 +13,10 @@
     </ion-toolbar>
   </ion-header>
   <ion-list>
-    <ion-item *ngFor="let order of order_list" (click)="goToOrderDetail(order)">
-      <ion-title>{{order.orderID}}</ion-title>
-      <ion-label>{{order.num_items}}</ion-label>
-      <ion-label>{{order.orderDate}}</ion-label>
+    <ion-item *ngFor="let order of allOrders" (click)="goToOrderDetail(order)">
+      <ion-title>{{order.itemName}}</ion-title>
+      <ion-label>{{order.quantity}}</ion-label>
+      <ion-label>{{order.date}}</ion-label>
       <ion-note>{{order.totalPrice}}</ion-note>
 
     </ion-item>

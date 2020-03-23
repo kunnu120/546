@@ -1,12 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>OrderDetailPage</ion-title>
+    <ion-button (click) = "DeleteOrder()" > Delete Order</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-title>OrderID: {{order.orderID}}</ion-title>
-  <ion-label>NumberOfItems: {{order.num_items}}</ion-label>
-  <ion-label>OrderDate: {{order.orderDate}}</ion-label>
-  <ion-note>TotalPrice: {{order.totalPrice}}</ion-note>
+  <ion-card>
+    <ion-title>OrderID: {{order.itemName}}</ion-title>
+    <ion-item><ion-label>NumberOfItems: {{order.quantity}}</ion-label></ion-item>
+    <ion-label>OrderDate: {{order.date}}</ion-label>
+    <ion-note>TotalPrice: {{order.totalPrice}}</ion-note>
+  </ion-card>
 </ion-content>

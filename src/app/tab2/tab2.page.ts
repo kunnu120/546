@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Item } from '../product-detail-page/product-detail-page.page'
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-tab2',
@@ -9,16 +10,19 @@ import { Item } from '../product-detail-page/product-detail-page.page'
 })
 export class Tab2Page {
 
-  public allOrders: orders;
-  order_list: {
-    orderID: string,
-    num_items: number,
-    totalPrice: number,
-    //orderDate: Date
-  }[];
+  public allOrders: order[];
   constructor(private route: Router) {
     var self = this;
-    this.allOrders = new orders();
+    firebase.database().ref('orders/'+firebase.auth().currentUser.uid+'/').once('value', snap => {
+      if(snap) {
+        this.allOrders = [];
+        snap.forEach(shot => {
+          this.allOrders.push(shot.val());
+        });
+      } else if(!snap) {
+        this.allOrders = [];
+      }
+    })
  /* this.order_list = [{orderID: "H454654", num_items: 69, totalPrice: 500, orderDate: new Date()},
   {orderID: "H454654", num_items: 69, totalPrice: 500, orderDate: new Date()},
   {orderID: "H454654", num_items: 69, totalPrice: 500, orderDate: new Date()},
@@ -26,7 +30,7 @@ export class Tab2Page {
   {orderID: "H454654", num_items: 69, totalPrice: 500, orderDate: new Date()}
 ]
 */
-console.log(this.order_list);
+console.log(this.allOrders);
 } 
 goToOrderDetail(item: any) {
   console.log(item)
@@ -35,37 +39,20 @@ goToOrderDetail(item: any) {
 }
 }
 
-export class orders {
-  public orderList: order[];
-  public currentOrder: order;
-  constructor() {
-    this.orderList = [];
-    this.createOrder(0);
-  }
-
-createOrder(orderDate: number) {
-  var tOrder: order = new order(orderDate);
-  this.orderList.push(tOrder);
-  this.currentOrder = this.orderList[this.orderList.length-1];
-}
 
 
-}
   export class order {
-    public items: Item[];
-    public totalItems: number;
-    public date: number;
+    public quantity: number;
+    public itemName: string;
+    public date: Date;
     public totalPrice: number;
-    constructor(orderDate: number) {
-      this.items = [];
-      this.totalItems = 0;
-      this.totalPrice = 0;
+    public uid: string;
+    constructor(orderDate: Date, itmName: string, uId: string, qnt: number, price: number) {
+      this.totalPrice = price*qnt;
       this.date = orderDate;
-    }
-    addAnItem(x: Item) {
-      this.items.push(x);
-      this.totalItems++;
-      this.totalPrice += x.price;
+      this.quantity = qnt;
+      this.itemName = itmName;
+      this.uid = uId;
     }
   }
 
