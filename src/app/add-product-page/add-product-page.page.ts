@@ -65,12 +65,15 @@ export class AddProductPagePage implements OnInit {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64 (DATA_URL):
      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     await firebase.storage().ref('productImages/'+new Date().toString()).putString(base64Image, firebase.storage.StringFormat.DATA_URL, { contentType: 'image/jpeg' }).then(snap => {
-       this.photoURL = snap.downloadURL;
-       alert("upload success"+JSON.stringify(snap));
+     await firebase.storage().ref('productImages/'+new Date().toString()).putString(base64Image, firebase.storage.StringFormat.DATA_URL, { contentType: 'image/jpeg' }).then(async snap => {
+       alert("upload success");
      }).catch(err => {
        alert(JSON.stringify(err));
-     });
+     }) //.on('state_changed', null, (err) => {
+     //
+     // }, (snapState) => {
+     //
+     // });
     }, (err) => {
      // Handle error
      alert(JSON.stringify(err));
