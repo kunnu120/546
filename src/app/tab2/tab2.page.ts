@@ -31,7 +31,7 @@ export class Tab2Page {
 ]
 */
 console.log(this.allOrders);
-} 
+}
 goToOrderDetail(item: any) {
   console.log(item)
   this.route.navigate(['order-detail-page', {items: JSON.stringify(item)}]);
@@ -42,17 +42,17 @@ goToOrderDetail(item: any) {
 
 
   export class order {
-    public quantity: number;
-    public itemName: string;
+    public quantities: number[];
+    public items: string[];
     public date: Date;
-    public totalPrice: number;
+    public totalPrice: number[];
     public uid: string;
-    constructor(orderDate: Date, itmName: string, uId: string, qnt: number, price: number) {
-      this.totalPrice = price*qnt;
+    public static current: order;
+    constructor(orderDate: Date, itmNames: string[], uId: string, qnt: number[], price: number[]) {
+      this.totalPrice = [price[0]*qnt[0]];
       this.date = orderDate;
-      this.quantity = qnt;
-      this.itemName = itmName;
+      this.quantities = qnt;
+      this.items = itmNames;
       this.uid = uId;
     }
   }
-

@@ -26,18 +26,30 @@ export class ProductDetailPagePage implements OnInit {
 
   AddToOrder() {
     firebase.database().ref('orders/'+firebase.auth().currentUser.uid+'/').once('value', snap => {
-      if(snap) {
+      if(snap.val()) {
         var orders: order[] = [];
         snap.forEach(shot => {
           orders.push(shot.val());
         });
-        console.log(orders);
-        orders.push(new order(new Date(), this.product['name'], firebase.auth().currentUser.uid,this.quantity, this.product['price']));
+        console.log(snap);
+        order.current = new order(new Date(), [""], "", [0], [0]);
+        order.current.date = new Date();
+        order.current.items = [this.product['name']];
+        order.current.quantities = [this.quantity];
+        order.current.uid = firebase.auth().currentUser.uid;
+        order.current.totalPrice = [this.quantity*this.product['price']];
         var updates = {};
         updates['orders/'+firebase.auth().currentUser.uid+'/'] = orders;
         firebase.database().ref().update(updates);
-      } else if (!snap) {
-        var orders: order[] = [new order(new Date(), this.product['name'], firebase.auth().currentUser.uid,this.quantity, this.product['price'])];
+      } else if (!snap.val()) {
+        console.log(snap);
+        var orders: order[] = [new order(new Date(), [""], "", [0], [0])];
+        order.current = new order(new Date(), [""], "", [0], [0]);
+        order.current.date = new Date();
+        order.current.items = [this.product['name']];
+        order.current.quantities = [this.quantity];
+        order.current.uid = firebase.auth().currentUser.uid;
+        order.current.totalPrice = [this.quantity*this.product['price']];
         firebase.database().ref('orders/'+firebase.auth().currentUser.uid+'/').set(orders).then(x => {
           console.log("success");
         });

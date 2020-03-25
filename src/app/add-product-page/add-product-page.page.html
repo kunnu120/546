@@ -33,6 +33,9 @@
     <ion-item>
       <ion-label>PhotoURL</ion-label>
       <ion-input [(ngModel)]="photoURL" ></ion-input>
+      <ion-button (click)="takePhotoAndUpload()">
+        <ion-icon name="camera"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 
