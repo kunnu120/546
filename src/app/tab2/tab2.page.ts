@@ -10,17 +10,14 @@ import * as firebase from 'firebase';
 })
 export class Tab2Page {
 
-  public allOrders: order[];
+  public allOrders: orders;
   constructor(private route: Router) {
     var self = this;
     firebase.database().ref('orders/'+firebase.auth().currentUser.uid+'/').once('value', snap => {
-      if(snap) {
-        this.allOrders = [];
-        snap.forEach(shot => {
-          this.allOrders.push(shot.val());
-        });
-      } else if(!snap) {
-        this.allOrders = [];
+      if(snap.val()) {
+        this.allOrders = snap.val()['orderList'];
+      } else if(!snap.val()) {
+        this.allOrders = null;
       }
     })
  /* this.order_list = [{orderID: "H454654", num_items: 69, totalPrice: 500, orderDate: new Date()},
@@ -39,20 +36,37 @@ goToOrderDetail(item: any) {
 }
 }
 
-
-
-  export class order {
-    public quantities: number[];
-    public items: string[];
-    public date: Date;
-    public totalPrice: number[];
-    public uid: string;
-    public static current: order;
-    constructor(orderDate: Date, itmNames: string[], uId: string, qnt: number[], price: number[]) {
-      this.totalPrice = [price[0]*qnt[0]];
-      this.date = orderDate;
-      this.quantities = qnt;
-      this.items = itmNames;
-      this.uid = uId;
-    }
+export class orders {
+  public orderList: order[];
+  public currentOrder: order;
+  constructor() {
+    this.orderList = [];
+    this.createOrder(new Date());
   }
+  createOrder(orderDate: Date) {
+    var tOrder: order = new order(orderDate);
+    this.orderList.push(tOrder);
+    this.currentOrder = this.orderList[this.orderList.length-1];
+  }
+  addAnItem(x: {}) {
+    this.currentOrder.addAnItem(x);
+    this.orderList[this.orderList.length-1] = this.currentOrder;
+  }
+}
+export class order {
+  public items: {}[];
+  public totalItems: number;
+  public date: Date;
+  public totalPrice: number;
+  constructor(orderDate: Date) {
+    this.items = [];
+    this.totalItems = 0;
+    this.totalPrice = 0;
+    this.date = orderDate;
+  }
+  addAnItem(x: {}) {
+    this.items.push(x);
+    this.totalItems++;
+    this.totalPrice += x['price'];
+  }
+}

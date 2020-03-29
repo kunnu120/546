@@ -24,7 +24,7 @@ export class AddProductPagePage implements OnInit {
 
   ngOnInit() {
   }
-  addProductToFirebase() {
+  async addProductToFirebase() {
     let product = {
       name: this.name,
       price: this.price,
@@ -33,7 +33,7 @@ export class AddProductPagePage implements OnInit {
       description: this.description,
       userid: firebase.auth().currentUser.uid
     }
-    firebase.database().ref('products/').once('value', snap=> {
+    await firebase.database().ref('products/').once('value', snap=> {
       if(snap.exists()) {
         let products: {}[] = [];
         snap.forEach(shot => {
@@ -43,14 +43,21 @@ export class AddProductPagePage implements OnInit {
         console.log(products)
         var updates = {};
         updates['products/'] = products;
-        firebase.database().ref().update(updates);
+        firebase.database().ref().update(updates).then(x => {
+          this.route.navigate(['tabs/tab1']);
+        }).catch(err => {
+          alert(JSON.stringify(err));
+        });
       } else if (!snap.exists()) {
         firebase.database().ref('products/').set([product]).then(snap => {
           console.log("success");
+          this.route.navigate(['tabs/tab1']);
+
+        }).catch(err => {
+          alert(JSON.stringify(err));
         });
       }
-    })
-
+    });
   }
   async takePhotoAndUpload() {
     const options: CameraOptions = {
@@ -65,15 +72,15 @@ export class AddProductPagePage implements OnInit {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64 (DATA_URL):
      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     await firebase.storage().ref('productImages/'+new Date().toString()).putString(base64Image, firebase.storage.StringFormat.DATA_URL, { contentType: 'image/jpeg' }).then(async snap => {
+     let name = new Date().toString();
+     await firebase.storage().ref('productImages/'+name).putString(base64Image, firebase.storage.StringFormat.DATA_URL, { contentType: 'image/jpeg' }).then(async snap => {
        alert("upload success");
+       await firebase.storage().ref('productImages/'+name).getDownloadURL().then(url => {
+         this.photoURL = url;
+       })
      }).catch(err => {
        alert(JSON.stringify(err));
-     }) //.on('state_changed', null, (err) => {
-     //
-     // }, (snapState) => {
-     //
-     // });
+     })
     }, (err) => {
      // Handle error
      alert(JSON.stringify(err));
