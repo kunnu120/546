@@ -78,7 +78,7 @@ export class ProductDetailPagePage implements OnInit {
         firebase.database().ref().update(updates);
         this.route.navigate(['tabs/tab1'])
       } else if(!snap) {
-        alert("U done fucked up boy");
+        alert("something's wrong");
       }
     })
   }
