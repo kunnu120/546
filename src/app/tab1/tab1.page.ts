@@ -27,6 +27,9 @@ export class Tab1Page {
 
   }
 
+  goToShoppingCart() {
+    this.route.navigate(['shopping-cart']);
+  }
   goToAddProductPage() {
     this.route.navigate(['add-product-page']);
   }
