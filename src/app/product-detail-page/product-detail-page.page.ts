@@ -30,7 +30,7 @@ export class ProductDetailPagePage implements OnInit {
         var orders: orders = snap.val();
         console.log(snap.val());
         for(let i: number = 0; i<this.quantity; i++) {
-          orders.currentOrder.items.push(this.product);
+          //orders.currentOrder.items.push(this.product);
           orders.currentOrder.totalItems++;
           orders.currentOrder.totalPrice += this.product['price'];
           orders.currentOrder.date = new Date();
